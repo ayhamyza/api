@@ -1,5 +1,6 @@
 const knex = require("../database/knex");
-const AppError = require("../utils/AppError")
+const AppError = require("../utils/AppError");
+const { compare } =  require("bcryptjs");
 
 
 
@@ -11,6 +12,12 @@ async create(request, response) {
 
     if (!user) {
       throw new AppError("E-mail ou senha incorreta", 401);
+    }
+
+    const passwordMatched = await compare (password, user.password);
+
+    if (!passwordMatched) {
+      throw new AppError ("E-mail ou senha incorreta", 401);
     }
 
 
