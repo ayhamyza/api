@@ -64,10 +64,10 @@ class UsersController {
 
   async update(request, response) { //FUNÇÃO ASSINCRONA PARA ATUALIZAÇÃO DE DADOS, TRATAMENTO DE EXCEÇÃO
      const { name, email, password, old_password } = request.body
-     const { id } = request.params
+     const user_id = request.user.id;
 
      const database = await sqliteConnection() //sqlConnection(conexão com banco de dados)
-     const user = await database.get("SELECT * FROM users WHERE id = (?)", [id])//user - ID
+     const user = await database.get("SELECT * FROM users WHERE id = (?)", [user_id])//user - ID
 
      if(!user) { //se usuário não existir dentro do banco de dados executar uma exceção
       throw new AppError("Usuário não encontrado") //exceção
@@ -105,7 +105,7 @@ class UsersController {
       password = ?,
       updated_at = DATETIME('now')
       WHERE id = ?`, 
-      [user.name, user.email, user.password, id]
+      [user.name, user.email, user.password, user_id]
     )
 
     return response.json()
