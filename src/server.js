@@ -8,6 +8,7 @@ const migrationsRun = require ("./database/sqlite/migrations")
 migrationsRun()
 
 const AppError = require("./utils/AppError")
+const uploadConfig = require("./configs/upload")
 
 const express = require ("express"); //importando express
 
@@ -17,6 +18,7 @@ const routes = require("./routes")
 const app = express(); //inicializando 
 app.use(express.json())
 
+app.use("/files", express.static(uploadConfig.UPLOADS_FOLDER))
 app.use(routes) //quando entra no arquivo atual é redirecionado para routes em index.js.
 
 app.use((error, request, response, next) => {
